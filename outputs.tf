@@ -33,3 +33,8 @@ output "bastion_private_key" {
   value     = tls_private_key.bastion.private_key_pem
   sensitive = true
 }
+
+output "alb_dns_name" {
+  description = "The DNS name of the load balancer"
+  value       = aws_lb.external.dns_name
+}

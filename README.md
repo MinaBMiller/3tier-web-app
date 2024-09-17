@@ -27,8 +27,8 @@ A bastion host is used for secure SSH access to the database tier.
 
 ## Accessing the Infrastructure
 
-- Web Application: Access via the load balancer DNS name (available in Terraform outputs)
-- Bastion Host: SSH using the key pair specified in the configuration
+- Web Application: Access via the load balancer DNS name
+- Bastion Host: SSH using the key pair created in the configuration
 - Database: Connect through the bastion host using SSH tunneling
 
 ## Customization
