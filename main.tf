@@ -5,7 +5,7 @@ provider "aws" {
 
 # VPC
 resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block = var.threetier_cidr
   
   tags = {
     Name = var.threetier_vpc

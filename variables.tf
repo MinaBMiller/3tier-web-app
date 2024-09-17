@@ -4,6 +4,12 @@ variable "threetier_region" {
   default     = "us-east-1"
 }
 
+variable "threetier_cidr" {
+  description = "Value of the cidr range for the VPC"
+  type        = string
+  default     = "10.0.0.0/16"
+}
+
 variable "threetier_vpc" {
   description = "Value of the Name tag for the VPC"
   type        = string
