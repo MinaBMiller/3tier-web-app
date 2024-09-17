@@ -115,6 +115,7 @@ variable "threetier_RDS_Instance" {
 variable "db_username" {
   description = "Username for the RDS instance"
   type        = string
+  default     = "Mina DB"
 }
 
 variable "db_password" {

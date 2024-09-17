@@ -136,7 +136,7 @@ resource "aws_route_table_association" "private_db" {
 # Security Groups
 resource "aws_security_group" "alb_external" {
   # Define rules for external ALB
-  name        = "mina-external-alb-sg"
+  name        = "3tier-external-alb-sg"
   description = "Security group for external ALB"
   vpc_id      = aws_vpc.main.id
 
@@ -170,7 +170,7 @@ resource "aws_security_group" "alb_external" {
 
 resource "aws_security_group" "alb_internal" {
   # Define rules for internal ALB
-  name        = "mina-internal-alb-sg"
+  name        = "3tier-internal-alb-sg"
   description = "Security group for internal ALB"
   vpc_id      = aws_vpc.main.id
 
@@ -196,7 +196,7 @@ resource "aws_security_group" "alb_internal" {
 
 resource "aws_security_group" "ec2_public" {
   # Define rules for public EC2 instances
-  name        = "mina-public-ec2-sg"
+  name        = "3tier-public-ec2-sg"
   description = "Security group for public EC2 instances"
   vpc_id      = aws_vpc.main.id
 
@@ -222,7 +222,7 @@ resource "aws_security_group" "ec2_public" {
 
 resource "aws_security_group" "ec2_private" {
   # Define rules for private EC2 instances
-  name        = "mina-private-ec2-sg"
+  name        = "3tier-private-ec2-sg"
   description = "Security group for private EC2 instances"
   vpc_id      = aws_vpc.main.id
 
@@ -256,7 +256,7 @@ resource "aws_security_group" "ec2_private" {
 
 resource "aws_security_group" "rds" {
   # Define rules for RDS
-  name        = "mina-rds-sg"
+  name        = "3tier-rds-sg"
   description = "Security group for RDS"
   vpc_id      = aws_vpc.main.id
 
@@ -275,7 +275,7 @@ resource "aws_security_group" "rds" {
 
 resource "aws_security_group" "bastion" {
   # Define rules for Bastion host
-  name        = "mina-bastion-sg"
+  name        = "3tier-bastion-sg"
   description = "Security group for Bastion host"
   vpc_id      = aws_vpc.main.id
 
@@ -301,7 +301,7 @@ resource "aws_security_group" "bastion" {
 
 # External ALB
 resource "aws_lb" "external" {
-  name               = "mina-external-alb"
+  name               = "3tier-external-alb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_external.id]
@@ -310,7 +310,7 @@ resource "aws_lb" "external" {
 
 # Internal ALB
 resource "aws_lb" "internal" {
-  name               = "mina-internal-alb"
+  name               = "3tier-internal-alb"
   internal           = true
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_internal.id]
@@ -320,7 +320,7 @@ resource "aws_lb" "internal" {
 # Auto Scaling Groups
 resource "aws_launch_template" "public" {
   # Define launch template for public instances
-  name_prefix   = "mina-public-lt-"
+  name_prefix   = "3tier-public-lt-"
   image_id      = "ami-08a0d1e16fc3f61ea"
   instance_type = "t2.micro"  
 
@@ -420,7 +420,7 @@ resource "aws_launch_template" "public" {
 
 resource "aws_autoscaling_group" "public" {
   # Define ASG for public instances
-  name                = "mina-public-asg"
+  name                = "3tier-public-asg"
   vpc_zone_identifier = aws_subnet.public[*].id
   target_group_arns   = [aws_lb_target_group.public.arn]
   health_check_type   = "ELB"
@@ -444,7 +444,7 @@ resource "aws_autoscaling_group" "public" {
 
 resource "aws_launch_template" "private" {
   # Define launch template for private instances
-  name_prefix   = "mina-private-lt-"
+  name_prefix   = "3tier-private-lt-"
   key_name      = aws_key_pair.bastion.key_name
   image_id      = "ami-08a0d1e16fc3f61ea"
   instance_type = "t2.micro"
@@ -545,7 +545,7 @@ resource "aws_launch_template" "private" {
 
 resource "aws_autoscaling_group" "private" {
   # Define ASG for private instances
-  name                = "mina-private-asg"
+  name                = "3tier-private-asg"
   vpc_zone_identifier = aws_subnet.private_app[*].id
   target_group_arns   = [aws_lb_target_group.private.arn]
   health_check_type   = "ELB"
@@ -568,7 +568,7 @@ resource "aws_autoscaling_group" "private" {
 }
 
 resource "aws_lb_target_group" "public" {
-  name     = "mina-public-tg"
+  name     = "3tier-public-tg"
   port     = 80
   protocol = "HTTP"
   vpc_id   = aws_vpc.main.id
@@ -582,7 +582,7 @@ resource "aws_lb_target_group" "public" {
 }
 
 resource "aws_lb_target_group" "private" {
-  name     = "mina-private-tg"
+  name     = "3tier-private-tg"
   port     = 80
   protocol = "HTTP"
   vpc_id   = aws_vpc.main.id
@@ -661,7 +661,7 @@ resource "aws_db_subnet_group" "main" {
 
 resource "aws_db_instance" "main" {
   # Define RDS instance
-  identifier        = "mina-db-instance"
+  identifier        = "3tier-db-instance"
   engine            = "mysql"
   engine_version    = "8.0"
   instance_class    = "db.t3.micro"
